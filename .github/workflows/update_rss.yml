@@ -3,9 +3,13 @@ name: Update RSS Feed
 on:
   schedule:
     # 毎週金曜日、中国時間(UTC+8) 13:30 に実行 (UTC 5:30)
-    # 分 時 日 月 曜日 (0=日曜, 1=月曜, ..., 5=金曜)
     - cron: '30 5 * * 5'
-  workflow_dispatch: # 手動実行も可能にする
+  workflow_dispatch: # 手動実行も可能
+
+# 権限を明示的に設定（これが重要！）
+permissions:
+  contents: write
+  actions: read
 
 jobs:
   update-rss:
@@ -14,6 +18,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        # トークンを明示的に指定（これも重要）
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Set up Python
       uses: actions/setup-python@v5
